@@ -298,11 +298,11 @@ func TestFields(t *testing.T) {
 			want   []field
 		}{
 			stract: struct {
-				LabelTest string `form:"label=This is custom"`
-				NameTest string `form:"name=age"`
-				TypeTest int `form:"type=number"`
+				LabelTest       string `form:"label=This is custom"`
+				NameTest        string `form:"name=age"`
+				TypeTest        int    `form:"type=number"`
 				PlaceholderTest string `form:"placeholder=put your value here..."`
-				Nested struct{
+				Nested          struct {
 					MultiTest string `form:"name=NestedMultiTest;label=This is a nested label;type=email;placeholder=example@gmail.com"`
 				}
 			}{
@@ -339,7 +339,7 @@ func TestFields(t *testing.T) {
 				},
 				{
 					Label:       "This is a nested label",
-					Name:        "Nested.NestedMultiTest",
+					Name:        "NestedMultiTest",
 					Type:        "email",
 					Placeholder: "example@gmail.com",
 					Value:       "",
@@ -354,38 +354,38 @@ func TestFields(t *testing.T) {
 			if reflect.DeepEqual(got, testCase.want) {
 				return
 			}
-			
+
 			if len(got) != len(testCase.want) {
 				t.Errorf("Fields() len = %d; want %d", len(got), len(testCase.want))
 			}
-			
+
 			for index, gotField := range got {
 				if index > len(testCase.want) {
 					break
 				}
-				
+
 				wantField := testCase.want[index]
 				if reflect.DeepEqual(gotField, wantField) {
 					continue
 				}
-				
+
 				t.Errorf("Fields()[%d]", index)
 				if gotField.Label != wantField.Label {
 					t.Errorf(" .Label = %v; want %v", gotField.Label, wantField.Label)
 				}
-				
+
 				if gotField.Name != wantField.Name {
 					t.Errorf(" .Name = %v; want %v", gotField.Name, wantField.Name)
 				}
-				
+
 				if gotField.Type != wantField.Type {
 					t.Errorf(" .Type = %v; want %v", gotField.Type, wantField.Type)
 				}
-				
+
 				if gotField.Placeholder != wantField.Placeholder {
 					t.Errorf(" .Placeholder = %v; want %v", gotField.Placeholder, wantField.Placeholder)
 				}
-				
+
 				if gotField.Value != wantField.Value {
 					t.Errorf(" .Value = %v; want %v", gotField.Value, wantField.Value)
 				}
@@ -479,7 +479,7 @@ func TestParseTags_Invalid(t *testing.T) {
 	}{
 		{reflect.StructField{Tag: `form:"invalid-value"`}},
 	}
-	
+
 	for _, testCase := range testCases {
 		t.Run(string(testCase.arg.Tag), func(t *testing.T) {
 			defer func() {
@@ -487,7 +487,7 @@ func TestParseTags_Invalid(t *testing.T) {
 					t.Error("parseTags() did not panic")
 				}
 			}()
-			
+
 			parseTags(testCase.arg)
 		})
 	}

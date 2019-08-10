@@ -11,27 +11,41 @@ type field struct {
 	Type        string
 	Placeholder string
 	Value       interface{}
+	Errors      []string
 }
 
-func (f *field) applyTags(tags map[string]string)  {
+type ErrorField struct {
+	Field string
+	Error string
+}
+
+func (f *field) applyTags(tags map[string]string) {
 	if value, ok := tags["name"]; ok {
 		f.Name = value
 	}
-	
+
 	if value, ok := tags["label"]; ok {
 		f.Label = value
 	}
-	
+
 	if value, ok := tags["type"]; ok {
 		f.Type = value
 	}
-	
+
 	if value, ok := tags["placeholder"]; ok {
 		f.Placeholder = value
 	}
-	
+
 	if value, ok := tags["value"]; ok {
 		f.Value = value
+	}
+}
+
+func (f *field) setErrors(errors []ErrorField)  {
+	for _, fieldErr := range errors {
+		if fieldErr.Field == f.Name {
+			f.Errors = append(f.Errors, fieldErr.Error)
+		}
 	}
 }
 
@@ -55,7 +69,7 @@ func valueOf(val interface{}) reflect.Value {
 	return reflectValue
 }
 
-func Fields(stract interface{}) []field {
+func Fields(stract interface{}, parentNames ...string) []field {
 	reflectValue := valueOf(stract)
 
 	if reflectValue.Kind() != reflect.Struct {
@@ -72,17 +86,17 @@ func Fields(stract interface{}) []field {
 		}
 
 		if reflectValueField.Kind() == reflect.Struct {
-			nestedFields := Fields(reflectValueField.Interface())
-			for index, nestedField := range nestedFields {
-				nestedFields[index].Name = typeField.Name + "." + nestedField.Name
-			}
+			nestedParentNames := append(parentNames, typeField.Name)
+			nestedFields := Fields(reflectValueField.Interface(), nestedParentNames...)
 
 			ret = append(ret, nestedFields...)
 			continue
 		}
+		names := append(parentNames, typeField.Name)
+		name := strings.Join(names, ".")
 		fld := field{
 			Label:       typeField.Name,
-			Name:        typeField.Name,
+			Name:        name,
 			Type:        "text",
 			Placeholder: typeField.Name,
 			Value:       reflectValueField.Interface(),
@@ -101,14 +115,14 @@ func parseTags(stractField reflect.StructField) map[string]string {
 		return nil
 	}
 	ret := make(map[string]string)
-	
+
 	tags := strings.Split(stractTag, ";")
 	for _, tag := range tags {
 		keyValuePair := strings.Split(tag, "=")
 		if len(keyValuePair) != 2 {
 			panic("invalid struct field tag")
 		}
-		
+
 		key, value := keyValuePair[0], keyValuePair[1]
 		ret[key] = value
 	}

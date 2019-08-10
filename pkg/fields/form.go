@@ -1,14 +1,16 @@
-package form
+package fields
 
 import (
-	"forms_with_go/internal/fields"
 	"html/template"
 	"strings"
 )
 
-func HTML(t *template.Template, stract interface{}) (template.HTML, error) {
+
+
+func HTML(t *template.Template, stract interface{}, errors ...ErrorField) (template.HTML, error) {
 	var inputs []string
-	for _, field := range fields.Fields(stract) {
+	for _, field := range Fields(stract) {
+		field.setErrors(errors)
 		var sb strings.Builder
 		err := t.Execute(&sb, field)
 		if err != nil {

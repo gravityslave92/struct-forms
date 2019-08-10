@@ -1,0 +1,21 @@
+
+<label>Email</label>
+	<input
+		class="border-red"
+		type="text"
+		name="Email"
+		placeholder="Email"
+		value="jondoe@gmail.com">
+<p class="text-red text-xs italic">Email address has already been taken</p>
+
+<label>Password</label>
+	<input
+		class="border-red"
+		type="text"
+		name="Password"
+		placeholder="Password"
+		value="admin">
+<p class="text-red text-xs italic">Password must be between 10 and 200 characters long</p>
+<p class="text-red text-xs italic">Password must contain a latin letter</p>
+<p class="text-red text-xs italic">Password must be a palindrome</p>
+<p class="text-red text-xs italic">Password must contain an emoji</p>

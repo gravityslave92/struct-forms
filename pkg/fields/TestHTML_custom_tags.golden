@@ -1,0 +1,31 @@
+
+	<label>this is custom label</label>
+	<input
+		type="text"
+		name="LabelTest"
+		placeholder="LabelTest"
+		>
+	<label>NameTest</label>
+	<input
+		type="text"
+		name="full_name"
+		placeholder="NameTest"
+		>
+	<label>TypeTest</label>
+	<input
+		type="number"
+		name="TypeTest"
+		placeholder="TypeTest"
+		>
+	<label>PlaceholderTest</label>
+	<input
+		type="text"
+		name="PlaceholderTest"
+		placeholder="this is placeholder..."
+		 value="placeholding">
+	<label>This is a nested label</label>
+	<input
+		type="email"
+		name="NestedMultiTest"
+		placeholder="example@gmail.com"
+		>
